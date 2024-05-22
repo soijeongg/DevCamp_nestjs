@@ -1,31 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { EntityManager, Repository } from 'typeorm';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities';
+import { EntityManager } from 'typeorm';
+import { user } from '../entities';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto';
 
 @Injectable()
-export class UserRepository extends Repository<User> {
-  constructor(
-    @InjectRepository(User) //특정 엔티티의 레파지토리를 의존관계로 주입할때 사용
-    private readonly repo: Repository<User>,
-    @InjectEntityManager()
-    private readonly entityManager: EntityManager,
-  ) {
-    super(repo.target, repo.manager, repo.queryRunner);
+export class UserRepository {
+  constructor(private readonly entityManager: EntityManager) {}
+
+  async findUserbyEmail(email: string): Promise<user> {
+    return this.entityManager.findOne(user, { where: { email } }); //범용이라 첫번째에 해당 엔티티 받음
   }
 
-  async findUserbyEmail(email: string): Promise<User> {
-    return this.repo.findOneBy({ email });
+  async createUser(dto: CreateUserDto, hashPassword): Promise<user> {
+    const User = new user();
+    User.name = dto.name;
+    User.email = dto.email;
+    User.password = hashPassword;
+    return this.entityManager.save(User);
+  }
+  async getAllUser(): Promise<user[]> {
+    return this.entityManager.find(user);
   }
 
-  async createUser(dto: CreateUserDto, hashPassword): Promise<User> {
-    const user = new User();
-    user.name = dto.name;
-    user.email = dto.email;
-    user.password = hashPassword;
-    return this.repo.save(user);
+  async findOneUser(userId: number): Promise<user> {
+    return this.entityManager.findOne(user, { where: { userId } });
+  }
+
+  async updateUser(userId: number, dto: UpdateUserDto) {
+    return this.entityManager.update(user, userId, dto);
+  }
+
+  async deleteUser(userId: number) {
+    return this.entityManager.delete(user, userId);
   }
 }
 
 // 암호화한 비밀번호가 들어온다 이 비밀번호를 User로 만든 객체 user에 넣고 객체를 저장함
+// entityManager는 데이터베이스와 상호작용하는데 사용 특정 엔티티 국한x

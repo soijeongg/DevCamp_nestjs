@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/types/auth.module';
 import { UserModule } from './user/types/user.module';
+import { user } from './user/entities';
+import { RefrashToken, AccessToken } from './auth/entities';
+import { ProductModule } from './product/product.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,7 +24,7 @@ import { UserModule } from './user/types/user.module';
         username: configService.get<string>('TYPEORM_USERNAME'),
         password: configService.get<string>('TYPEORM_PASSWORD'),
         database: configService.get<string>('TYPEORM_DATABASE'),
-        entities: [],
+        entities: [user, AccessToken, RefrashToken],
         synchronize: true,
         ssl: {
           rejectUnauthorized: false,
@@ -31,6 +34,7 @@ import { UserModule } from './user/types/user.module';
     }),
     AuthModule,
     UserModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

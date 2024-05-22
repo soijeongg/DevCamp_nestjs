@@ -1,4 +1,4 @@
-export type LoginResDto = {
+export class LoginResDto {
   accessToken: string;
   refreshToken: string;
   user: {
@@ -6,4 +6,4 @@ export type LoginResDto = {
     name: string;
     email: string;
   };
-};
+}
