@@ -19,11 +19,16 @@ export class UserRepository {
     User.password = hashPassword;
     return this.entityManager.save(User);
   }
+
   async getAllUser(): Promise<user[]> {
     return this.entityManager.find(user);
   }
 
-  async findOneUser(userId: number): Promise<user> {
+  async findByEmail(email: string): Promise<user> {
+    return this.entityManager.findOne(user, { where: { email } });
+  }
+
+  async findOneUser(userId: number): Promise<user | undefined> {
     return this.entityManager.findOne(user, { where: { userId } });
   }
 
