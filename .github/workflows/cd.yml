@@ -54,4 +54,5 @@ jobs:
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/nestjs-app:$GITHUB_SHA \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --set-env-vars PORT=3000
