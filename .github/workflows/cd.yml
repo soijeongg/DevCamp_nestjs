@@ -32,7 +32,8 @@ jobs:
           --build-arg TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
           --build-arg TYPEORM_SYNCHRONIZE=${{ secrets.TYPEORM_SYNCHRONIZE }} \
           --build-arg TYPEORM_LOGGING=${{ secrets.TYPEORM_LOGGING }} \
-          --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }}
+          --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          .
 
       - name: Push Docker image
         run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/nestjs-app:$GITHUB_SHA
