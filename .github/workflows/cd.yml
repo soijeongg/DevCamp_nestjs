@@ -13,12 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-          version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
 
       - name: Configure Docker
         run: gcloud auth configure-docker
@@ -26,15 +29,15 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/nestjs-app:$GITHUB_SHA \
-          --build-arg TYPEORM_HOST=${{ secrets.TYPEORM_HOST }} \
-          --build-arg TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
-          --build-arg TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
-          --build-arg TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
-          --build-arg TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
-          --build-arg TYPEORM_SYNCHRONIZE=${{ secrets.TYPEORM_SYNCHRONIZE }} \
-          --build-arg TYPEORM_LOGGING=${{ secrets.TYPEORM_LOGGING }} \
-          --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
-          .
+            --build-arg TYPEORM_HOST=${{ secrets.TYPEORM_HOST }} \
+            --build-arg TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
+            --build-arg TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
+            --build-arg TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
+            --build-arg TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
+            --build-arg TYPEORM_SYNCHRONIZE=${{ secrets.TYPEORM_SYNCHRONIZE }} \
+            --build-arg TYPEORM_LOGGING=${{ secrets.TYPEORM_LOGGING }} \
+            --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            .
 
       - name: Push Docker image
         run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/nestjs-app:$GITHUB_SHA
