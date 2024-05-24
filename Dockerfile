@@ -26,4 +26,6 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm install
 RUN npm run build
+# 컨테이너 포트 노출
+EXPOSE 3000
 CMD ["node", "dist/main"]
