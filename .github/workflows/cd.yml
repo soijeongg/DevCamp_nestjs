@@ -23,6 +23,12 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
+      - name: Enable APIs
+        run: |
+          gcloud services enable run.googleapis.com \
+            artifactregistry.googleapis.com \
+            --project=${{ secrets.GCP_PROJECT_ID }}
+
       - name: Configure Docker
         run: gcloud auth configure-docker
 
