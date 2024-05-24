@@ -24,7 +24,8 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/nestjs-app:$GITHUB_SHA \
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/nestjs-app:$GITHUB_SHA \
           --build-arg TYPEORM_HOST=${{ secrets.TYPEORM_HOST }} \
           --build-arg TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
           --build-arg TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
