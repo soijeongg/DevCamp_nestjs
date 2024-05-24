@@ -1,7 +1,7 @@
 import { Controller, Body, Post, Delete, UseGuards, Req } from '@nestjs/common';
 import { loginReqDTO } from '../dto';
 import { AuthService } from '../service/auth.service';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -13,12 +13,12 @@ export class AuthController {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     return this.authservice.login(dto);
   }
-  /*
+
   @Delete('logout')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   async logout(@Req() req): Promise<void> {
     const accessToken = req.headers.authorization.split(' ')[1];
     const refrashToken = req.headers.authorization.split(' ')[2];
     await this.authservice.logout(accessToken, refrashToken);
-  } */
+  }
 }

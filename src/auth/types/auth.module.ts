@@ -4,17 +4,25 @@ import { AuthService } from '../service/auth.service';
 import { AuthController } from '../controller/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AccessToken, RefrashToken } from '../entities';
+import { AccessToken, RefrashToken, BlacklistedToken } from '../entities';
 import { user } from 'src/user/entities';
 import { UserRepository } from 'src/user/repositories/user.respository';
 import {
   RefashTokenRepository,
   AcessTokenRepository,
+  blacklistTokenRepo,
 } from '../repositories/index';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard/jwt-auth.guard';
+import { JwtStrategy } from '../strategies/jwt.strategy/jwt.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AccessToken, RefrashToken, user]),
+    TypeOrmModule.forFeature([
+      AccessToken,
+      RefrashToken,
+      BlacklistedToken,
+      user,
+    ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -29,6 +37,9 @@ import {
     AcessTokenRepository,
     RefashTokenRepository,
     UserRepository,
+    blacklistTokenRepo,
+    JwtAuthGuard,
+    JwtStrategy,
   ],
   controllers: [AuthController],
 })
