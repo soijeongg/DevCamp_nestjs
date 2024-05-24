@@ -1,4 +1,4 @@
-FROM node:plane
+FROM node:alpine
 
 #ARG로 변수 선언
 ARG TYPEORM_HOST
