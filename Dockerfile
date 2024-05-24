@@ -1,4 +1,4 @@
-FROM nest:plane
+FROM node:plane
 
 #ARG로 변수 선언
 ARG TYPEORM_HOST
