@@ -19,7 +19,7 @@ TYPEORM_SYNCHRONIZE=$TYPEORM_SYNCHRONIZE \
 TYPEORM_LOGGING=$TYPEORM_LOGGING \
 JWT_SECRET=$JWT_SECRET
 
-LABEL creator="soi@dev_camp"
+LABEL creator="soi@dev__camp"
 WORKDIR /app 
 COPY . .
 COPY package.json .
