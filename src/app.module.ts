@@ -8,6 +8,8 @@ import { UserModule } from './user/types/user.module';
 import { user } from './user/entities';
 import { RefrashToken, AccessToken } from './auth/entities';
 import { ProductModule } from './product/product.module';
+import { PaymentModule } from './payment/payment.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,8 +37,9 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     UserModule,
     ProductModule,
+    PaymentModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CouponService],
 })
 export class AppModule {}
