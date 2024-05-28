@@ -2,7 +2,7 @@
 스파르타코딩클럽 데브캠프 nestjs
 
 ### 파일 구조
-
+```code
 ├─ .github
 │  └─ workflows
 │     └─ cd.yml
@@ -108,7 +108,7 @@
 │  └─ jest-e2e.json
 ├─ tsconfig.build.json
 └─ tsconfig.json
-
+```
 ### 기술스택
 nest.js+ 타입스크립트
 npm
