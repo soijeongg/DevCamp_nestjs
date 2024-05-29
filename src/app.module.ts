@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/types/auth.module';
 import { UserModule } from './user/types/user.module';
 import { user } from './user/entities';
-import { Coupon, newCoupon } from './payment/entities';
+import { Coupon, newCoupon, Point } from './payment/entities';
 import { RefrashToken, AccessToken } from './auth/entities';
 import { ProductModule } from './product/product.module';
 import { PaymentModule } from './payment/payment.module';
@@ -29,7 +29,7 @@ import { UserService } from './user/services/user.service';
         username: configService.get<string>('TYPEORM_USERNAME'),
         password: configService.get<string>('TYPEORM_PASSWORD'),
         database: configService.get<string>('TYPEORM_DATABASE'),
-        entities: [user, AccessToken, RefrashToken, Coupon, newCoupon],
+        entities: [user, AccessToken, RefrashToken, Coupon, newCoupon, Point],
         synchronize: true,
         ssl: {
           rejectUnauthorized: false,

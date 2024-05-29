@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Res } from '@nestjs/common';
 import { PaymentService } from '../service/payment.service';
-import { CreatePaymentDto } from '../dto/create-payment.dto';
-import { applyCouponDto } from 'src/auth/dto/applyCoupon.dto';
+import { CreatePaymentDto,applyCouponDto, paymentDto, applyPointDto,createPointDto, reqPointOrderDto } from '../dto';
 import { Response } from 'express';
 
 @Controller('payment')
@@ -27,7 +26,7 @@ export class PaymentController {
 
   @Post('/apply')
   async applyCoupon(
-    couponDto: applyCouponDto,
+    @Body() couponDto: applyCouponDto,
     @Res() res: Response,
   ): Promise<void> {
     const userId = res.locals.userId;
@@ -44,5 +43,16 @@ export class PaymentController {
       couponDto.amount,
     );
     res.status(HttpStatus.OK).json({ discountedAmount });
+  }
+
+  @Post('/point')
+  async createPoint(@Body() pointDto: reqPointOrderDto, @Res() res: Response) {
+    pointDto.userId = res.locals.userId;
+    return this.paymentService.createPoint(pointDto);
+  }
+  @Get('/point')
+  async getPoint(@Res() res: Response) {
+    const userId = res.locals.userId;
+    return this.paymentService.getPoint(userId);
   }
 }

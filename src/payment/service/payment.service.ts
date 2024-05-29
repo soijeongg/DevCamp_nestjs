@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreatePaymentDto } from '../dto/create-payment.dto';
-import { CouponRepository } from '../repositories/coupon.repository';
+import { CreatePaymentDto, reqPointOrderDto } from '../dto';
+import { CouponRepository, PointRepository } from '../repositories';
 import { HttpException } from '@nestjs/common';
 import { UserRepository } from 'src/user/repositories/user.respository';
 @Injectable()
@@ -8,6 +8,7 @@ export class PaymentService {
   constructor(
     private readonly couponRepository: CouponRepository,
     private readonly userRepository: UserRepository,
+    private readonly pointRepository: PointRepository,
   ) {}
   //쿠폰 생성 -> 쿠폰 받음
   async create(createPaymentDto: CreatePaymentDto) {
@@ -56,5 +57,37 @@ export class PaymentService {
     }
     await this.couponRepository.deleteCoupon(couponId);
     return amount;
+  }
+  //포인트 적립 -> 들어온 최종가격의 10%를 적립해준다
+  async createPoint(pointDto: reqPointOrderDto) {
+    const point = pointDto.amount / 10;
+    const userId = pointDto.userId;
+    const dto = { userId, point };
+    return this.pointRepository.createPoint(dto);
+  }
+  async getPoint(userId: number) {
+    return this.pointRepository.getUserPoint(userId);
+  }
+
+  async applyPoint(pointDto: reqPointOrderDto) {
+    if (pointDto.amount < 5000) {
+      throw new HttpException(
+        '5000원 이상부터 쿠폰 사용이 가능합니다',
+        HttpStatus.BAD_REQUEST,
+      );
+    } else {
+      const userId = pointDto.userId;
+      const point = pointDto.point;
+      const dto = { userId, point };
+      const checkPoint = await this.pointRepository.deletePoint(dto);
+      if (!checkPoint) {
+        throw new HttpException(
+          '사용할 포인트가 부족하거나 유저를 찾을 수 없습니다',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const newAmount = pointDto.amount - pointDto.point;
+      return newAmount;
+    }
   }
 }
