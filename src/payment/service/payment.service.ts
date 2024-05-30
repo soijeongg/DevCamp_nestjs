@@ -1,15 +1,20 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreatePaymentDto, reqPointOrderDto } from '../dto';
-import { CouponRepository, PointRepository } from '../repositories';
+import { Body, HttpStatus, Injectable } from '@nestjs/common';
+import { CreatePaymentDto, TossPaymentDto, reqPointOrderDto } from '../dto/index';
+import { CouponRepository, PointRepository } from '../repositories/index';
 import { HttpException } from '@nestjs/common';
 import { UserRepository } from 'src/user/repositories/user.respository';
+import axios from 'axios';
 @Injectable()
 export class PaymentService {
+  private readonly tossurl: string;
+  private readonly secretkey: string;
   constructor(
     private readonly couponRepository: CouponRepository,
     private readonly userRepository: UserRepository,
     private readonly pointRepository: PointRepository,
-  ) {}
+  ) {
+    this.tossurl = 'http://api.tosspayments.com/v1/payments/',
+     this.secretkey = process.env.TOSS_TEST_KEY}
   //쿠폰 생성 -> 쿠폰 받음
   async create(createPaymentDto: CreatePaymentDto) {
     return await this.couponRepository.createCoupon(createPaymentDto);
@@ -88,6 +93,27 @@ export class PaymentService {
       }
       const newAmount = pointDto.amount - pointDto.point;
       return newAmount;
+    }
+  }
+  async tossPayment(tosspaymentDto: TossPaymentDto) {
+    const { orderId, amount, paymentKey} = tosspaymentDto;
+    try {
+      const response = await axios.post(
+        `$(this.tossurl)/$(paymentKey)`,
+        { orderId, amount },
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(`$(this.secretkey}:`).toString('base64')} `,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      return {
+        title: '성공',
+        body: response.data,
+      };
+    } catch (error) {
+      throw new HttpException('결제시에 문제가 발생했습니다', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 }

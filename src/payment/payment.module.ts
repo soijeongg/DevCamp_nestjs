@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PaymentService } from './service/payment.service';
 import { PaymentController } from './controller/payment.controller';
-import { CouponRepository, PointRepository } from './repositories';
+import { CouponRepository, PointRepository } from './repositories/index';
 import { UserRepository } from 'src/user/repositories/user.respository';
 
 @Module({

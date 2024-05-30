@@ -6,7 +6,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { AccessToken, RefrashToken } from '../../auth/entities/index';
-import { Coupon, Point } from 'src/payment/entities';
+import { Coupon, Point } from '../../payment/entities/index';
 
 @Entity()
 export class user {

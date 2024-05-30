@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { Point } from '../entities';
-import { createPointDto, applyPointDto } from '../dto';
+import { Point } from '../entities/index';
+import { createPointDto, applyPointDto } from '../dto/index';
 import { user } from 'src/user/entities';
 
 @Injectable()

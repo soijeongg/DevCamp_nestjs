@@ -1,4 +1,4 @@
-import { user } from 'src/user/entities';
+import { user } from '../../user/entities';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { newCoupon } from './newCooupon.entity';
 

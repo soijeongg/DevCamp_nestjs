@@ -5,7 +5,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { user } from 'src/user/entities';
+import { user } from '../../user/entities/index';
 @Entity()
 export class Point {
   @PrimaryGeneratedColumn()

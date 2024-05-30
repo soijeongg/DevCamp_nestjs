@@ -1,7 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Res } from '@nestjs/common';
 import { PaymentService } from '../service/payment.service';
-import { CreatePaymentDto,applyCouponDto, paymentDto, applyPointDto,createPointDto, reqPointOrderDto } from '../dto';
+import { CreatePaymentDto, applyCouponDto, reqPointOrderDto,TossPaymentDto } from '../dto/index';
 import { Response } from 'express';
+import { join } from 'path';
 
 @Controller('payment')
 export class PaymentController {
@@ -54,5 +55,13 @@ export class PaymentController {
   async getPoint(@Res() res: Response) {
     const userId = res.locals.userId;
     return this.paymentService.getPoint(userId);
+  }
+  @Get('/sucess')
+  sucess(@Res() res: Response): void {
+    res.sendFile(join(__dirname, '..', '..', 'public', 'sucess.html'));
+  }
+  @Post('/toss')
+  tossPayment(@Body() tosspaymentDto: TossPaymentDto) {
+    return this.paymentService.tossPayment(tosspaymentDto);
   }
 }
