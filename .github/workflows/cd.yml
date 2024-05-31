@@ -43,6 +43,7 @@ jobs:
             --build-arg TYPEORM_SYNCHRONIZE=${{ secrets.TYPEORM_SYNCHRONIZE }} \
             --build-arg TYPEORM_LOGGING=${{ secrets.TYPEORM_LOGGING }} \
             --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            --build-arg TOSS_TEST_KEY=${{secrets.TOSS_TEST_KEY}} \
             .
 
       - name: Push Docker image
